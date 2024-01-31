@@ -49,6 +49,8 @@ cd web && npm install && npm run build
 BACKEND=BING python search_with_lepton.py
 ```
 
+
+#### Using Google Search Api
 For Google Search using SearchApi:
 ```shell
 export SEARCHAPI_API_KEY=YOUR_SEARCHAPI_API_KEY
