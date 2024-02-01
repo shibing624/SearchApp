@@ -601,12 +601,13 @@ class RAG(Photon):
         # Basic attack protection: remove "[INST]" or "[/INST]" from the query
         query = re.sub(r"\[/?INST\]", "", query)
         contexts = self.search_function(query)
-
+        logger.debug(f"query: {query}, search api results num: {len(contexts)}, top2: {contexts[:2]}")
         system_prompt = _rag_query_text.format(
             context="\n\n".join(
                 [f"[[citation:{i + 1}]] {c['snippet']}" for i, c in enumerate(contexts)]
             )
         )
+        logger.debug(f"system prompt: {system_prompt}")
         try:
             client = self.local_client()
             llm_response = client.chat.completions.create(
