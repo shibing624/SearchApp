@@ -28,6 +28,8 @@
 - 内置支持bing/google搜索引擎
 - 可定制的美观UI界面
 - 可分享，缓存搜索结果
+- 支持问题追问，连续问答
+- 支持query分析，基于上下文重写query，精准搜索
 
 ## 设置搜索引擎API
 
@@ -100,15 +102,16 @@ BACKEND=GOOGLE python search.py
 
 
 ## 部署 
+除了上面的本地部署服务外，
 
-您可以通过以下方式部署自己的版本：
+您可以通过以下方式在lepton部署自己的版本：
  
 ```shell
 lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --env BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
 ```
  
 了解更多关于`lep photon` 的信息 [这里](https://www.lepton.ai/docs)。
-  
+
 #### 部署配置
 
 以下是部署配置：
@@ -118,7 +121,7 @@ lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --
 
 然后，设置以下环境变量。
 
-* `BACKEND`：要使用的搜索后端。如果你没有设置bing或google，只需使用`LEPTON`尝试演示。否则，请做 `BING`, `GOOGLE` 或者 `SEARCHAPI`
+* `BACKEND`：要使用的搜索后端。如果你没有设置bing或google，只需使用`LEPTON`尝试演示。否则，请做 `BING`, `GOOGLE`, `SERPER` 或者 `SEARCHAPI`
 * `LLM_MODEL`: 运行的LLM模型。我们建议使用`mixtral-8x7b`, 但如果你想尝试其他模型, 你可以尝试在LeptonAI上托管的那些, 比如说, `llama2-70b`, `llama2-13b`, `llama2-7b`. 注意小模型可能效果不佳
 * `KV_NAME`: 存储搜索结果所用到的Lepton KV. 可以使用默认值 'search-with-lepton'
 * `RELATED_QUESTIONS`: 是否生成相关问题. 如果设定为'true', 搜索引擎会为你生成相关问题. 否则就不会

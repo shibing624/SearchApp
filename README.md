@@ -28,6 +28,8 @@
 - Built-in support for search engine
 - Customizable pretty UI interface
 - Shareable, cached search results
+- Support for follow-up questions, continuous Q&A
+- Supports query analysis, rewrites queries based on context for precise search
 
 ## Setup Search Engine API
 There are two default supported search engines: Bing and Google.
@@ -105,7 +107,7 @@ Here are the configurations you can set for your deployment:
 
 Then, set the following environmental variables.
 
-* `BACKEND`: the search backend to use. If you don't have bing or google set up, simply use `LEPTON` to try the demo. Otherwise, do `BING`, `GOOGLE` or `SEARCHAPI`.
+* `BACKEND`: the search backend to use. If you don't have bing or google set up, simply use `LEPTON` to try the demo. Otherwise, do `BING`, `GOOGLE`, `SERPER` or `SEARCHAPI`.
 * `LLM_MODEL`: the LLM model to run. We recommend using `mixtral-8x7b`, but if you want to experiment other models, you can try the ones hosted on LeptonAI, for example, `llama2-70b`, `llama2-13b`, `llama2-7b`. Note that small models won't work that well.
 * `KV_NAME`: the Lepton KV to use to store the search results. You can use the default `search-with-lepton`.
 * `RELATED_QUESTIONS`: whether to generate related questions. If you set this to `true`, the search engine will generate related questions for you. Otherwise, it will not.
