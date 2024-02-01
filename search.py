@@ -4,22 +4,21 @@ import json
 import os
 import re
 import threading
-import requests
 import traceback
 from typing import Annotated, List, Generator, Optional
 
+import httpx
+import leptonai
+import requests
 from fastapi import HTTPException
 from fastapi.responses import HTMLResponse, StreamingResponse, RedirectResponse
-import httpx
-from loguru import logger
-
-import leptonai
 from leptonai import Client
+from leptonai.api.workspace import WorkspaceInfoLocalRecord
 from leptonai.kv import KV
 from leptonai.photon import Photon, StaticFiles
 from leptonai.photon.types import to_bool
-from leptonai.api.workspace import WorkspaceInfoLocalRecord
 from leptonai.util import tool
+from loguru import logger
 
 ################################################################################
 # Constant values for the RAG model.
@@ -40,7 +39,6 @@ REFERENCE_COUNT = 8
 # does not respond within this time, we will return an error.
 DEFAULT_SEARCH_ENGINE_TIMEOUT = 5
 
-
 # If the user did not provide a query, we will use this default query.
 _default_query = "Who said 'live long and prosper'?"
 
@@ -49,7 +47,7 @@ _default_query = "Who said 'live long and prosper'?"
 # behave differently, and we haven't tuned the prompt to make it optimal - this
 # is left to you, application creators, as an open problem.
 _rag_query_text = """
-You are a large language AI assistant built by Lepton AI. You are given a user question, and please write clean, concise and accurate answer to the question. You will be given a set of related contexts to the question, each starting with a reference number like [[citation:x]], where x is a number. Please use the context and cite the context at the end of each sentence if applicable.
+You are a large language AI assistant. You are given a user question, and please write clean, concise and accurate answer to the question. You will be given a set of related contexts to the question, each starting with a reference number like [[citation:x]], where x is a number. Please use the context and cite the context at the end of each sentence if applicable.
 
 Your answer must be correct, accurate and written by an expert using an unbiased and professional tone. Please limit to 1024 tokens. Do not give any information that is not related to the question, and do not repeat. Say "information is missing on" followed by the related topic, if the given context do not provide sufficient information.
 
@@ -59,12 +57,12 @@ Here are the set of contexts:
 
 {context}
 
-Remember, don't blindly repeat the contexts verbatim. And here is the user question:
+Remember, don't blindly repeat the contexts verbatim, you answer must be in the same language as the user question. And here is the user question:
 """
 
 # A set of stop words to use - this is not a complete set, and you may want to
 # add more given your observation.
-stop_words = [
+lepton_stop_words = [
     "<|im_end|>",
     "[End]",
     "[end]",
@@ -176,7 +174,7 @@ def search_with_serper(query: str, subscription_key: str):
             snippet = json_content["knowledgeGraph"].get("description")
             if url and snippet:
                 contexts.append({
-                    "name": json_content["knowledgeGraph"].get("title",""),
+                    "name": json_content["knowledgeGraph"].get("title", ""),
                     "url": url,
                     "snippet": snippet
                 })
@@ -185,18 +183,19 @@ def search_with_serper(query: str, subscription_key: str):
             snippet = json_content["answerBox"].get("snippet") or json_content["answerBox"].get("answer")
             if url and snippet:
                 contexts.append({
-                    "name": json_content["answerBox"].get("title",""),
+                    "name": json_content["answerBox"].get("title", ""),
                     "url": url,
                     "snippet": snippet
                 })
         contexts += [
-            {"name": c["title"], "url": c["link"], "snippet": c.get("snippet","")}
+            {"name": c["title"], "url": c["link"], "snippet": c.get("snippet", "")}
             for c in json_content["organic"]
         ]
         return contexts[:REFERENCE_COUNT]
     except KeyError:
         logger.error(f"Error encountered: {json_content}")
         return []
+
 
 def search_with_searchapi(query: str, subscription_key: str):
     """
@@ -239,7 +238,7 @@ def search_with_searchapi(query: str, subscription_key: str):
 
             title = json_content["answer_box"].get("title", "")
             url = json_content["answer_box"].get("link")
-            snippet =  json_content["answer_box"].get("answer") or json_content["answer_box"].get("snippet")
+            snippet = json_content["answer_box"].get("answer") or json_content["answer_box"].get("snippet")
 
             if url and snippet:
                 contexts.append({
@@ -266,14 +265,14 @@ def search_with_searchapi(query: str, subscription_key: str):
             {"name": c["title"], "url": c["link"], "snippet": c.get("snippet", "")}
             for c in json_content["organic_results"]
         ]
-        
+
         if json_content.get("related_questions"):
             for question in json_content["related_questions"]:
                 if question.get("source"):
                     url = question.get("source").get("link", "")
                 else:
-                    url = ""  
-                    
+                    url = ""
+
                 snippet = question.get("answer", "")
 
                 if url and snippet:
@@ -287,6 +286,7 @@ def search_with_searchapi(query: str, subscription_key: str):
     except KeyError:
         logger.error(f"Error encountered: {json_content}")
         return []
+
 
 class RAG(Photon):
     """
@@ -321,6 +321,7 @@ class RAG(Photon):
             # If you are using google, specify the search cx.
             "GOOGLE_SEARCH_CX": "",
             # Specify the LLM model you are going to use.
+            "LLM_TYPE": "LEPTON",
             "LLM_MODEL": "mixtral-8x7b",
             # For all the search queries and results, we will use the Lepton KV to
             # store them so that we can retrieve them later. Specify the name of the
@@ -330,6 +331,8 @@ class RAG(Photon):
             "RELATED_QUESTIONS": "true",
             # On the lepton platform, allow web access when you are logged in.
             "LEPTON_ENABLE_AUTH_BY_COOKIE": "true",
+            "OPENAI_BASE_URL": "https://api.openai.com/v1",
+
         },
         # Secrets you need to have: search api subscription key, and lepton
         # workspace token to query lepton's llama models.
@@ -346,6 +349,8 @@ class RAG(Photon):
             "SEARCHAPI_API_KEY",
             # You need to specify the workspace token to query lepton's LLM models.
             "LEPTON_WORKSPACE_TOKEN",
+            # OpenAI key
+            "OPENAI_API_KEY",
         ],
     }
 
@@ -365,9 +370,9 @@ class RAG(Photon):
             return thread_local.client
         except AttributeError:
             thread_local.client = openai.OpenAI(
-                base_url=f"https://{self.model}.lepton.run/api/v1/",
-                api_key=os.environ.get("LEPTON_WORKSPACE_TOKEN")
-                or WorkspaceInfoLocalRecord.get_current_workspace_token(),
+                base_url=self.openai_base_url or f"https://{self.model}.lepton.run/api/v1/",
+                api_key=os.environ.get("LEPTON_WORKSPACE_TOKEN") or os.environ.get("OPENAI_API_KEY")
+                        or WorkspaceInfoLocalRecord.get_current_workspace_token(),
                 # We will set the connect timeout to be 10 seconds, and read/write
                 # timeout to be 120 seconds, in case the inference server is
                 # overloaded.
@@ -386,7 +391,7 @@ class RAG(Photon):
             self.leptonsearch_client = Client(
                 "https://search-api.lepton.run/",
                 token=os.environ.get("LEPTON_WORKSPACE_TOKEN")
-                or WorkspaceInfoLocalRecord.get_current_workspace_token(),
+                      or WorkspaceInfoLocalRecord.get_current_workspace_token(),
                 stream=True,
                 timeout=httpx.Timeout(connect=10, read=120, write=120, pool=10),
             )
@@ -417,65 +422,72 @@ class RAG(Photon):
             )
         else:
             raise RuntimeError("Backend must be LEPTON, BING, GOOGLE, SERPER or SEARCHAPI.")
+        logger.info(f"Using Search API backend: {self.backend}")
+        self.llm_type = os.environ["LLM_TYPE"].upper()
+        logger.info(f"Using LLM type: {self.llm_type}")
         self.model = os.environ["LLM_MODEL"]
+        logger.info(f"Using LLM model: {self.model}")
         # An executor to carry out async tasks, such as uploading to KV.
         self.executor = concurrent.futures.ThreadPoolExecutor(
             max_workers=self.handler_max_concurrency * 2
         )
         # Create the KV to store the search results.
         logger.info("Creating KV. May take a while for the first time.")
-        self.kv = KV(
-            os.environ["KV_NAME"], create_if_not_exists=True, error_if_exists=False
-        )
+        self.kv = KV(os.environ["KV_NAME"], create_if_not_exists=True, error_if_exists=False)
         # whether we should generate related questions.
         self.should_do_related_questions = to_bool(os.environ["RELATED_QUESTIONS"])
+        self.openai_base_url = os.environ["OPENAI_BASE_URL"]
+        logger.info(f"Using OpenAI base url: {self.openai_base_url}")
+
 
     def get_related_questions(self, query, contexts):
         """
         Gets related questions based on the query and context.
         """
-
         def ask_related_questions(
-            questions: Annotated[
-                List[str],
-                [(
-                    "question",
-                    Annotated[
-                        str, "related question to the original question and context."
-                    ],
-                )],
-            ]
+                questions: Annotated[
+                    List[str], [(
+                            "question",
+                            Annotated[
+                                str, "related question to the original question and context."
+                            ],
+                    )],
+                ]
         ):
             """
             ask further questions that are related to the input and output.
             """
             pass
 
+
         try:
+            messages = [
+                {
+                    "role": "system",
+                    "content": _more_questions_prompt.format(
+                        context="\n\n".join([c["snippet"] for c in contexts])
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": query,
+                },
+            ]
+            tools = [{
+                "type": "function",
+                "function": tool.get_tools_spec(ask_related_questions),
+            }]
+            max_tokens = 512
             response = self.local_client().chat.completions.create(
                 model=self.model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": _more_questions_prompt.format(
-                            context="\n\n".join([c["snippet"] for c in contexts])
-                        ),
-                    },
-                    {
-                        "role": "user",
-                        "content": query,
-                    },
-                ],
-                tools=[{
-                    "type": "function",
-                    "function": tool.get_tools_spec(ask_related_questions),
-                }],
-                max_tokens=512,
+                messages=messages,
+                tools=tools,
+                max_tokens=max_tokens,
             )
             related = response.choices[0].message.tool_calls[0].function.arguments
             if isinstance(related, str):
                 related = json.loads(related)
-            logger.trace(f"Related questions: {related}")
+            logger.debug(f"Related questions: {related}")
             return related["questions"][:5]
         except Exception as e:
             # For any exceptions, we will just return an empty list.
@@ -486,7 +498,7 @@ class RAG(Photon):
             return []
 
     def _raw_stream_response(
-        self, contexts, llm_response, related_questions_future
+            self, contexts, llm_response, related_questions_future
     ) -> Generator[str, None, None]:
         """
         A generator that yields the raw stream response. You do not need to call
@@ -519,7 +531,7 @@ class RAG(Photon):
             yield result
 
     def stream_and_upload_to_kv(
-        self, contexts, llm_response, related_questions_future, search_uuid
+            self, contexts, llm_response, related_questions_future, search_uuid
     ) -> Generator[str, None, None]:
         """
         Streams the result and uploads to KV.
@@ -527,7 +539,7 @@ class RAG(Photon):
         # First, stream and yield the results.
         all_yielded_results = []
         for result in self._raw_stream_response(
-            contexts, llm_response, related_questions_future
+                contexts, llm_response, related_questions_future
         ):
             all_yielded_results.append(result)
             yield result
@@ -537,10 +549,10 @@ class RAG(Photon):
 
     @Photon.handler(method="POST", path="/query")
     def query_function(
-        self,
-        query: str,
-        search_uuid: str,
-        generate_related_questions: Optional[bool] = True,
+            self,
+            query: str,
+            search_uuid: str,
+            generate_related_questions: Optional[bool] = True,
     ) -> StreamingResponse:
         """
         Query the search engine and returns the response.
@@ -567,7 +579,7 @@ class RAG(Photon):
 
                 return StreamingResponse(str_to_generator(result))
             except KeyError:
-                logger.info(f"Key {search_uuid} not found, will generate again.")
+                logger.debug(f"Search api key {search_uuid} not found, add to KV.")
             except Exception as e:
                 logger.error(
                     f"KV error: {e}\n{traceback.format_exc()}, will generate again."
@@ -592,7 +604,7 @@ class RAG(Photon):
 
         system_prompt = _rag_query_text.format(
             context="\n\n".join(
-                [f"[[citation:{i+1}]] {c['snippet']}" for i, c in enumerate(contexts)]
+                [f"[[citation:{i + 1}]] {c['snippet']}" for i, c in enumerate(contexts)]
             )
         )
         try:
@@ -604,16 +616,14 @@ class RAG(Photon):
                     {"role": "user", "content": query},
                 ],
                 max_tokens=1024,
-                stop=stop_words,
+                stop=lepton_stop_words if self.llm_type == "LEPTON" else None,
                 stream=True,
                 temperature=0.9,
             )
             if self.should_do_related_questions and generate_related_questions:
                 # While the answer is being generated, we can start generating
                 # related questions as a future.
-                related_questions_future = self.executor.submit(
-                    self.get_related_questions, query, contexts
-                )
+                related_questions_future = self.executor.submit(self.get_related_questions, query, contexts)
             else:
                 related_questions_future = None
         except Exception as e:
