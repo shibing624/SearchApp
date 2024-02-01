@@ -4,7 +4,15 @@ export const Logo: FC = () => {
   return (
     <div className="flex gap-4 items-center justify-center cursor-default select-none relative">
       <div className="h-10 w-10">
-        <svg className="h-full w-full" viewBox="0 0 85 85">
+        <svg
+          className="icon"
+          viewBox="0 0 1066 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="6021"
+          width="85"
+          height="85"
+        >
           <path
             d="M716.501333 734.165333l241.92 241.92a42.666667 42.666667 0 1 0 60.373334-60.288l-241.92-241.962666a42.666667 42.666667 0 0 0-60.373334 60.330666z"
             fill="#4D84DB"
