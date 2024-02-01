@@ -121,6 +121,11 @@ In addition, you will need to set the following secrets:
 * `OPENAI_BASE_URL`: if you are using OpenAI, you can specify the base url. It is usually `https://api.openai.com/v1`.
 
 
+## Todo
+
+1. Support multi-round retrieval, mainly displaying multi-round retrieval results on the page.
+2. Support third-party LLM's API, such as qwen, baichuan, etc.
+3. Mini program support, currently only supports web end.
 
 ## Contact
 

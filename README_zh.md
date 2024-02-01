@@ -25,7 +25,7 @@
 ## Features
 - 内置支持开源LLM
 - 支持OpenAI LLM API
-- 内置支持搜索引擎
+- 内置支持bing/google搜索引擎
 - 可定制的美观UI界面
 - 可分享，缓存搜索结果
 
@@ -134,6 +134,10 @@ lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --
 * `OPENAI_API_KEY`: 如果正在使用OpenAI, 需要指定api密钥
 * `OPENAI_BASE_URL`: 如果您正在使用OpenAI，可以指定基础url。通常为`https://api.openai.com/v1`
 
+## Todo
+1. 支持多轮检索，主要是页面显示多轮检索结果
+2. 支持第三方LLM的API，如qwen、baichuan等
+3. 小程序端支持，目前只支持web端
 
 ## Contact
 - Issue(建议)：[![GitHub issues](https://img.shields.io/github/issues/shibing624/SmartSearch.svg)](https://github.com/shibing624/SmartSearch/issues)
