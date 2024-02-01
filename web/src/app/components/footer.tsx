@@ -1,4 +1,3 @@
-import { Mails } from "lucide-react";
 import { FC } from "react";
 
 export const Footer: FC = () => {
@@ -16,10 +15,7 @@ export const Footer: FC = () => {
         <a className="hover:text-zinc-950" href="https://mulanai.com/">
           Home
         </a>
-        <a
-          className="hover:text-zinc-950"
-          href="https://search.mulanai.com"
-        >
+        <a className="hover:text-zinc-950" href="https://search.mulanai.com">
           API Playground
         </a>
         <a
@@ -28,10 +24,16 @@ export const Footer: FC = () => {
         >
           Python Library
         </a>
-        <a className="hover:text-zinc-950" href="https://twitter.com/OilandLuca">
+        <a
+          className="hover:text-zinc-950"
+          href="https://twitter.com/OilandLuca"
+        >
           Twitter
         </a>
-        <a className="hover:text-zinc-950" href="https://blog.csdn.net/mingzai624">
+        <a
+          className="hover:text-zinc-950"
+          href="https://blog.csdn.net/mingzai624"
+        >
           Blog
         </a>
       </div>
