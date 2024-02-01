@@ -23,8 +23,8 @@
 
 
 ## Features
-- Built-in support for LLM
-- Support OpenAI LLMs
+- Built-in support for LLM, you can build API with local model
+- Support OpenAI LLMs, such as `gpt-4`
 - Built-in support for search engine
 - Customizable pretty UI interface
 - Shareable, cached search results

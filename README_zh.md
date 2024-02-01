@@ -23,8 +23,8 @@
 
 
 ## Features
-- 内置支持开源LLM
-- 支持OpenAI LLM API
+- 内置支持开源LLM，可用本地模型搭建API
+- 支持OpenAI LLM API，可用`gpt-4`
 - 内置支持bing/google搜索引擎
 - 可定制的美观UI界面
 - 可分享，缓存搜索结果
