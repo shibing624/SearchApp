@@ -4,13 +4,15 @@
     <a href="https://github.com/shibing624/SmartSearch">
     <img src="https://github.com/shibing624/SmartSearch/blob/main/docs/icon.svg" height="50" alt="Logo">
     </a>
+    <br/>
     <a href="https://search.mulanai.com/" target="_blank"> Online Demo </a>
     <br/>
     <img width="70%" src="https://github.com/shibing624/SmartSearch/blob/main/docs/screenshot.png">
 </div>
+
 -----------------
 
-# Smart Search: Build your own conversational search engine with LLMs.
+# SmartSearch: Build your own conversational search engine with LLMs
 [![HF Models](https://img.shields.io/badge/Hugging%20Face-shibing624-green)](https://huggingface.co/shibing624)
 [![Github Stars](https://img.shields.io/github/stars/shibing624/SmartSearch?color=yellow)](https://star-history.com/#shibing624/SmartSearch&Timeline)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
