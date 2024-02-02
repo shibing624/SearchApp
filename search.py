@@ -695,16 +695,17 @@ class RAG(Photon):
         # the user to share a searched link to others and have others see the same result.
         if search_uuid:
             try:
-                # Update search uuid: query + backend + llm
-                search_uuid = "_".join([
-                    query.strip(),
-                    self.backend,
-                    self.llm_type,
-                    self.model,
-                    os.environ.get("KV_NAME", ""),
-                    str(self.should_do_rewrite_question),
-                    str(self.enable_history)
-                ])
+                if not search_uuid.endswith("_again"):
+                    # Update search uuid: query + backend + llm
+                    search_uuid = "_".join([
+                        query,
+                        self.backend,
+                        self.llm_type,
+                        self.model,
+                        os.environ.get("KV_NAME", ""),
+                        str(self.should_do_rewrite_question),
+                        str(self.enable_history)
+                    ])
                 result = self.kv.get(search_uuid)
 
                 def str_to_generator(result: str) -> Generator[str, None, None]:
