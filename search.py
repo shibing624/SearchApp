@@ -74,13 +74,13 @@ _rag_qa_prompt = """Here are the set of contexts:
 
 {context}
 
-Remember, answer the question with contexts, but don't blindly repeat the contexts verbatim. Please cite the contexts with the reference numbers, in the format [citation:x]. And here is the user question:
+Please answer the question with contexts, but don't blindly repeat the contexts verbatim. Please cite the contexts with the reference numbers, in the format [citation:x]. And here is the user question:
 """
 _rag_qa_prompt_zh = """以下是一组上下文：
 
 {context}
 
-请记住，基于上下文回答问题，不要盲目地逐字重复上下文。请以[citation:x]的格式引用上下文。这是用户的问题：
+基于上下文回答问题，不要盲目地逐字重复上下文。请以[citation:x]的格式引用上下文。这是用户的问题：
 """
 # This is the prompt that asks the model to generate related questions to the
 # original question and the contexts.
@@ -104,22 +104,26 @@ _related_qa_prompt = """You assist users in posing relevant questions based on t
 
 {context}
 
-Remember, based on the original question and related contexts, suggest three such further questions. Do NOT repeat the original question. Each related question should be no longer than 20 words. Here is the original question:
+based on the original question and related contexts, suggest three such further questions. Do NOT repeat the original question. Each related question should be no longer than 20 words. Here is the original question:
 """
 _related_qa_prompt_zh = """你帮助用户根据他们的原始问题和相关背景提出相关问题，可以结合历史消息。请确定值得跟进的主题，每个问题不超过20个token。以下是问题的上下文：
 
 {context}
 
-请记住，根据原始问题和相关上下文，提出三个相似的问题。不要重复原始问题。每个相关问题应不超过20个token。这是原始问题：
+根据原始问题和相关上下文，提出三个相似的问题。不要重复原始问题。每个相关问题应不超过20个token。这是原始问题：
 """
 # This is the prompt that asks the model to rewrite the question.
-_rewrite_question_system_prompt = """Your task is to rewrite user questions. If the original question is unclear, please rewrite it to be more precise and concise (up to 20 tokens), this rewritten question will be used for information search; if the original question is very clear, there is no need to rewrite, just output the original question; if you are unsure how to rewrite, also do not need to rewrite, just output the original question."""
-_rewrite_question_system_prompt_zh = """你的任务是改写用户问题。如果原始问题不清楚，请将其改写得更精确、简洁（最多20个token），这个改写后的问题将用于搜索信息；如果原始问题很清晰，则无需改写，直接输出原始问题；如果你不确定如何改写，也无需改写，直接输出原始问题。"""
-
-_rewrite_question_qa_prompt = """Please remember to rewrite the original question for Google search. Do not answer user questions. This is the original question:
+_rewrite_question_system_prompt = """Your task is to rewrite user questions. If the original question is unclear, please rewrite it to be more precise and concise (up to 20 tokens), this rewritten question will be used for information search; if the original question is very clear, there is no need to rewrite, just output the original question; if you are unsure how to rewrite, also do not need to rewrite, just output the original question.
+Please rewrite the original question for Google search. Do not answer user questions.
+"""
+_rewrite_question_system_prompt_zh = """你的任务是改写用户问题。如果原始问题不清楚，请将其改写得更精确、简洁（最多20个token），这个改写后的问题将用于搜索信息；如果原始问题很清晰，则无需改写，直接输出原始问题；如果你不确定如何改写，也无需改写，直接输出原始问题。
+你给出改写后的问题，用于谷歌搜索，不要回答用户问题。
 """
 
-_rewrite_question_qa_prompt_zh = """请记住，根据原始问题改写出用于谷歌搜索的问题。不要回答用户问题。这是原始问题：
+_rewrite_question_qa_prompt = """This is the original question:
+"""
+
+_rewrite_question_qa_prompt_zh = """这是原始问题：
 """
 
 REDUCE_TOKEN_FACTOR = 0.5  # Reduce the token occupancy to less than the model upper tokens.
@@ -387,7 +391,7 @@ class RAG(Photon):
             # On the lepton platform, allow web access when you are logged in.
             "LEPTON_ENABLE_AUTH_BY_COOKIE": "true",
             # If you want to enable history, set this to true. Otherwise, set it to false.
-            "ENABLE_HISTORY": "false",
+            "ENABLE_HISTORY": "true",
             # If you are using openai, specify the base url, e.g. https://api.openai.com/v1
             "OPENAI_BASE_URL": "https://api.openai.com/v1",
 
@@ -581,10 +585,10 @@ class RAG(Photon):
             )
             self.question_history = self.reduce_tokens(self.question_history)
             # Append the user question to the rewrite question history.
-            self.question_history.append({"role": "user", "content": query})
+            self.question_history.append({"role": "user", "content": user_prompt})
 
             new_question = response.choices[0].message.content
-            logger.debug(f"New questions: {new_question}")
+            logger.debug(f"question rewrite result: {new_question}")
             return new_question
         except Exception as e:
             # For any exceptions, we will just return an empty list.
