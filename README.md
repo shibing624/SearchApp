@@ -59,13 +59,19 @@ pip install -r requirements.txt
 ```shell
 cd web && npm install && npm run build
 ```
-2. Run server
+2. Run server with Lepton API
+```shell
+python search.py
+```
+
+alternatively, you can run server with Bing Search API or Google Search API.
+#### Using Bing Search API
 ```shell
 export BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
 BACKEND=BING python search.py
 ```
 
-alternatively, you can run server with Google Search API.
+
 #### Using Google Search Api
 For Google Search using SearchApi:
 ```shell
@@ -108,11 +114,16 @@ Here are the configurations you can set for your deployment:
 Then, set the following environmental variables.
 
 * `BACKEND`: the search backend to use. If you don't have bing or google set up, simply use `LEPTON` to try the demo. Otherwise, do `BING`, `GOOGLE`, `SERPER` or `SEARCHAPI`.
+* `LLM_TYPE`: the LLM type to use. If you are using Lepton, set it to `lepton`. Otherwise, set it to `openai`.
 * `LLM_MODEL`: the LLM model to run. We recommend using `mixtral-8x7b`, but if you want to experiment other models, you can try the ones hosted on LeptonAI, for example, `llama2-70b`, `llama2-13b`, `llama2-7b`. Note that small models won't work that well.
 * `KV_NAME`: the Lepton KV to use to store the search results. You can use the default `search-with-lepton`.
 * `RELATED_QUESTIONS`: whether to generate related questions. If you set this to `true`, the search engine will generate related questions for you. Otherwise, it will not.
+* `REWRITE_QUESTION`: whether to rewrite the question. If you set this to `true`, the LLM will rewrite the question and send it to the search engine. Otherwise, it will not.
 * `GOOGLE_SEARCH_CX`: if you are using google, specify the search cx. Otherwise, leave it empty.
 * `LEPTON_ENABLE_AUTH_BY_COOKIE`: this is to allow web UI access to the deployment. Set it to `true`.
+* `OPENAI_BASE_URL`: if you are using OpenAI, you can specify the base url. It is usually `https://api.openai.com/v1`.
+* `ENABLE_HISTORY`: whether to enable history. If you set this to `true`, the LLM will store the search history. Otherwise, it will not.
+
 
 In addition, you will need to set the following secrets:
 * `LEPTON_WORKSPACE_TOKEN`: this is required to call Lepton's LLM and KV apis. You can find your workspace token at [Settings](https://dashboard.lepton.ai/workspace-redirect/settings).
@@ -120,7 +131,6 @@ In addition, you will need to set the following secrets:
 * `GOOGLE_SEARCH_API_KEY`: if you are using Google, you need to specify the search api key. Note that you should also specify the cx in the env. If you are not using Google, it is not needed.
 * `SEARCHAPI_API_KEY`: if you are using SearchApi, a 3rd party Google Search API, you need to specify the api key.
 * `OPENAI_API_KEY`: if you are using OpenAI, you need to specify the api key.
-* `OPENAI_BASE_URL`: if you are using OpenAI, you can specify the base url. It is usually `https://api.openai.com/v1`.
 
 
 ## Todo

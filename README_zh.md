@@ -31,6 +31,7 @@
 - 支持问题追问，连续问答
 - 支持query分析，基于上下文重写query，精准搜索
 
+
 ## 设置搜索引擎API
 
 默认支持两种搜索引擎：Bing和Google。
@@ -122,11 +123,15 @@ lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --
 然后，设置以下环境变量。
 
 * `BACKEND`：要使用的搜索后端。如果你没有设置bing或google，只需使用`LEPTON`尝试演示。否则，请做 `BING`, `GOOGLE`, `SERPER` 或者 `SEARCHAPI`
+* `LLM_TYPE`：要使用的LLM类型。如果您正在使用Lepton，请将其设置为`lepton`。否则，将其设置为`openai`。
 * `LLM_MODEL`: 运行的LLM模型。我们建议使用`mixtral-8x7b`, 但如果你想尝试其他模型, 你可以尝试在LeptonAI上托管的那些, 比如说, `llama2-70b`, `llama2-13b`, `llama2-7b`. 注意小模型可能效果不佳
 * `KV_NAME`: 存储搜索结果所用到的Lepton KV. 可以使用默认值 'search-with-lepton'
 * `RELATED_QUESTIONS`: 是否生成相关问题. 如果设定为'true', 搜索引擎会为你生成相关问题. 否则就不会
-* GOOGLE_SEARCH_CX: 如果正在使用谷歌，请指定搜索cx。否则请留空
-* LEPTON_ENABLE_AUTH_BY_COOKIE: 允许Web UI访问部署。将其设为'true'
+* `REWRITE_QUESTION`：是否重写问题。如果您将此设置为`true`，LLM将重写问题并将其发送到搜索引擎。否则，它不会
+* `GOOGLE_SEARCH_CX`: 如果正在使用谷歌官方API，请指定搜索cx。否则请留空
+* `LEPTON_ENABLE_AUTH_BY_COOKIE`: 允许Web UI访问部署。将其设为'true'
+* `OPENAI_BASE_URL`: 如果您正在使用OpenAI，可以指定基础url。通常为`https://api.openai.com/v1`
+* `ENABLE_HISTORY`：是否启用历史记录。如果您将此设置为`true`，LLM将存储搜索历史记录。否则，它不会
 
 此外，您还可以设置以下KEY：
 
@@ -135,12 +140,13 @@ lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --
 * `GOOGLE_SEARCH_API_KEY`: 如果正在使用Google, 需要指定搜索api密钥. 注意也应该在环境中指定cx. 如果没有使用Google，则不需要
 * `SEARCHAPI_API_KEY`: 如果正在使用SearchApi，一个第三方谷歌搜索API，需要指定api密钥
 * `OPENAI_API_KEY`: 如果正在使用OpenAI, 需要指定api密钥
-* `OPENAI_BASE_URL`: 如果您正在使用OpenAI，可以指定基础url。通常为`https://api.openai.com/v1`
+
 
 ## Todo
-1. 支持多轮检索，主要是页面显示多轮检索结果
-2. 支持第三方LLM的API，如qwen、baichuan等
-3. 小程序端支持，目前只支持web端
+- 支持多轮检索，主要是页面显示多轮检索结果
+- 支持第三方LLM的API，如qwen、baichuan等
+- 小程序端支持，目前只支持web端
+- 使用Agent判定是否需要改写query，以及主动反问用户补充问题，提升搜索准确率
 
 ## Contact
 - Issue(建议)：[![GitHub issues](https://img.shields.io/github/issues/shibing624/SmartSearch.svg)](https://github.com/shibing624/SmartSearch/issues)

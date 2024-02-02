@@ -66,21 +66,21 @@ Please cite the contexts with the reference numbers, in the format [citation:x].
 
 _rag_system_prompt_zh = """你是一个大型的语言AI助手。当用户提出问题时，请你写出清晰、简洁且准确的答案。我们会给你一组与问题相关的上下文，每个上下文都以类似[[citation:x]]这样的引用编号开始，其中x是一个数字。如果适用，请在每句话后面使用并引述该上下文。
 
-你的答案必须正确、精确，并由专家以公正和专业的语气撰写。请将您的回答限制在1024个token内。如果所提供的上下文信息不足，可以使用自己知识来回答用户问题。
+你的答案必须正确、精确，并由专家以公正和专业的语气撰写。请将你的回答限制在1024个token内。如果所提供的上下文信息不足，可以使用自己知识来回答用户问题。
 
-请按照[citation:x]格式引用带有参考编号的上下文。如果一句话来自多个上下文，请列出所有适用于此处引述，如[citation:3][citation:5]。除代码、特定名称和引述外，您必须使用与问题相同语言编写您的回答。
+请按照[citation:x]格式引用带有参考编号的上下文。如果一句话来自多个上下文，请列出所有适用于此处引述，如[citation:3][citation:5]。除代码、特定名称和引述外，你必须使用与问题相同语言编写你的回答。
 """
 _rag_qa_prompt = """Here are the set of contexts:
 
 {context}
 
-Remember, don't blindly repeat the contexts verbatim, you answer must be in the same language as the user question. Please cite the contexts with the reference numbers, in the format [citation:x]. And here is the user question:
+Remember, answer the question with contexts, but don't blindly repeat the contexts verbatim. Please cite the contexts with the reference numbers, in the format [citation:x]. And here is the user question:
 """
 _rag_qa_prompt_zh = """以下是一组上下文：
 
 {context}
 
-请记住，不要盲目地逐字重复上下文，你的回答必须与用户问题的语言相同。请以[citation:x]的格式引用上下文。这是用户的问题：
+请记住，基于上下文回答问题，不要盲目地逐字重复上下文。请以[citation:x]的格式引用上下文。这是用户的问题：
 """
 # This is the prompt that asks the model to generate related questions to the
 # original question and the contexts.
@@ -93,18 +93,12 @@ _rag_qa_prompt_zh = """以下是一组上下文：
 # questions. This is not ideal, but it is a good tradeoff between response time
 # and quality.
 _related_system_prompt = """You are a helpful assistant that helps the user to ask related questions, based on user's original question and the related contexts. Please identify worthwhile topics that can be follow-ups, and write questions no longer than 20 words each. 
-Please make sure that specifics, like events, names, locations, are included in follow up questions so they can be asked standalone. 
+Please make sure that specifics, like events, names, locations, are included in follow up questions so they can be asked standalone. Your related questions must be in the same language as the original question.
 
 For example, if the original question asks about "the Manhattan project", in the follow up question, do not just say "the project", but use the full name "the Manhattan project". 
-Your related questions must be in the same language as the original question.
 """
-_related_system_prompt_zh = """你是一个有用的助手，帮助用户根据他们的原始问题和相关背景提出相关问题。请确定值得跟进的主题，并写出不超过20个token的问题。
-
-请确保具体细节，如事件、名字、地点等都包含在后续问题中，这样它们可以单独被问到。
-
+_related_system_prompt_zh = """你是一个有用的助手，帮助用户根据他们的原始问题和相关背景提出相关问题。请确定值得跟进的主题，你给出的问题字数不超过20个token。请确保具体细节，如事件、名字、地点等都包含在后续问题中，这样它们可以单独被问到。你提出的相关问题必须与原始问题语言相同。
 例如，如果原始问题询问“曼哈顿计划”，那么在后续问题中，请不要只说“该计划”，而应使用全称“曼哈顿计划”。
-
-你提出的相关问题必须与原始问题语言相同。
 """
 _related_qa_prompt = """You assist users in posing relevant questions based on their original queries and related background. Please identify topics worth following up on, and write out questions that each do not exceed 20 tokens. You Can combine with historical messages. Here are the contexts of the question:
 
@@ -119,13 +113,13 @@ _related_qa_prompt_zh = """你帮助用户根据他们的原始问题和相关�
 请记住，根据原始问题和相关上下文，提出三个相似的问题。不要重复原始问题。每个相关问题应不超过20个token。这是原始问题：
 """
 # This is the prompt that asks the model to rewrite the question.
-_rewrite_question_qa_prompt = """Your task is to rewrite user questions. If the original question is unclear, please rewrite it to be more precise and concise (up to 20 tokens), this rewritten question will be used for information search; if the original question is very clear, there is no need to rewrite, just output the original question; if you are unsure how to rewrite, also do not need to rewrite, just output the original question.
+_rewrite_question_system_prompt = """Your task is to rewrite user questions. If the original question is unclear, please rewrite it to be more precise and concise (up to 20 tokens), this rewritten question will be used for information search; if the original question is very clear, there is no need to rewrite, just output the original question; if you are unsure how to rewrite, also do not need to rewrite, just output the original question."""
+_rewrite_question_system_prompt_zh = """你的任务是改写用户问题。如果原始问题不清楚，请将其改写得更精确、简洁（最多20个token），这个改写后的问题将用于搜索信息；如果原始问题很清晰，则无需改写，直接输出原始问题；如果你不确定如何改写，也无需改写，直接输出原始问题。"""
 
-Please remember that your rewritten question must use the same language as the original question. This is the original question:
+_rewrite_question_qa_prompt = """Please remember to rewrite the original question for Google search. Do not answer user questions. This is the original question:
 """
-_rewrite_question_qa_prompt_zh = """你的任务是改写用户问题。如果原始问题不清楚，请将其改写得更精确、简洁（最多20个token），这个改写后的问题将用于搜索信息；如果原始问题很清晰，则无需改写，直接输出原始问题；如果你不确定如何改写，也无需改写，直接输出原始问题。
 
-请记住，您改写后的问题必须与原始问题使用相同的语言。这是原始问题：
+_rewrite_question_qa_prompt_zh = """请记住，根据原始问题改写出用于谷歌搜索的问题。不要回答用户问题。这是原始问题：
 """
 
 REDUCE_TOKEN_FACTOR = 0.5  # Reduce the token occupancy to less than the model upper tokens.
@@ -376,24 +370,26 @@ class RAG(Photon):
             # at https://search-api.lepton.run/ to do the search and RAG, which
             # runs the same code (slightly modified and might contain improvements)
             # as this demo.
-            "BACKEND": "SERPER",
-            # If you are using google, specify the search cx.
+            "BACKEND": "LEPTON",
+            # If you are using google, specify the search cx and GOOGLE_SEARCH_API_KEY
             "GOOGLE_SEARCH_CX": "",
-            # Specify the LLM model you are going to use.
+            # Specify the LLM model you are going to use. can be `LEPTON`, `OPENAI`
             "LLM_TYPE": "LEPTON",
             "LLM_MODEL": "mixtral-8x7b",
             # For all the search queries and results, we will use the Lepton KV to
             # store them so that we can retrieve them later. Specify the name of the
             # KV here.
-            "KV_NAME": "search-with-lepton",
+            "KV_NAME": "smart-search",
             # If set to true, will generate related questions. Otherwise, will not.
             "RELATED_QUESTIONS": "true",
             # if set to true, will rewrite user question. Otherwise, will not.
             "REWRITE_QUESTION": "false",
             # On the lepton platform, allow web access when you are logged in.
             "LEPTON_ENABLE_AUTH_BY_COOKIE": "true",
+            # If you want to enable history, set this to true. Otherwise, set it to false.
+            "ENABLE_HISTORY": "false",
             # If you are using openai, specify the base url, e.g. https://api.openai.com/v1
-            "OPENAI_BASE_URL": "",
+            "OPENAI_BASE_URL": "https://api.openai.com/v1",
 
         },
         # Secrets you need to have: search api subscription key, and lepton
@@ -431,10 +427,16 @@ class RAG(Photon):
         try:
             return thread_local.client
         except AttributeError:
+            if self.llm_type == "LEPTON":
+                base_url = f"https://{self.model}.lepton.run/api/v1/"
+                api_key = os.environ.get(
+                    "LEPTON_WORKSPACE_TOKEN") or WorkspaceInfoLocalRecord.get_current_workspace_token()
+            else:
+                base_url = os.environ.get("OPENAI_BASE_URL")
+                api_key = os.environ.get("OPENAI_API_KEY")
             thread_local.client = openai.OpenAI(
-                base_url=self.openai_base_url or f"https://{self.model}.lepton.run/api/v1/",
-                api_key=os.environ.get("LEPTON_WORKSPACE_TOKEN") or os.environ.get("OPENAI_API_KEY")
-                        or WorkspaceInfoLocalRecord.get_current_workspace_token(),
+                base_url=base_url,
+                api_key=api_key,
                 # We will set the connect timeout to be 10 seconds, and read/write
                 # timeout to be 120 seconds, in case the inference server is
                 # overloaded.
@@ -452,8 +454,8 @@ class RAG(Photon):
         if self.backend == "LEPTON":
             self.leptonsearch_client = Client(
                 "https://search-api.lepton.run/",
-                token=os.environ.get("LEPTON_WORKSPACE_TOKEN")
-                      or WorkspaceInfoLocalRecord.get_current_workspace_token(),
+                token=os.environ.get(
+                    "LEPTON_WORKSPACE_TOKEN") or WorkspaceInfoLocalRecord.get_current_workspace_token(),
                 stream=True,
                 timeout=httpx.Timeout(connect=10, read=120, write=120, pool=10),
             )
@@ -498,9 +500,6 @@ class RAG(Photon):
         self.kv = KV(os.environ["KV_NAME"], create_if_not_exists=True, error_if_exists=False)
         # whether we should generate related questions.
         self.should_do_related_questions = to_bool(os.environ["RELATED_QUESTIONS"])
-        self.openai_base_url = os.environ["OPENAI_BASE_URL"]
-        if self.openai_base_url:
-            logger.info(f"Using OpenAI base url: {self.openai_base_url}")
         # A history of all the queries and responses.
         self.history = []
         # A history of all the related questions.
@@ -510,6 +509,8 @@ class RAG(Photon):
         self.token_upper_limit = MODEL_TOKEN_LIMIT.get(self.model, 4096)
         # whether we should rewrite user question
         self.should_do_rewrite_question = to_bool(os.environ["REWRITE_QUESTION"])
+        # whether we should enable history
+        self.enable_history = to_bool(os.environ["ENABLE_HISTORY"])
 
     def get_related_questions(self, query, contexts):
         """
@@ -532,10 +533,6 @@ class RAG(Photon):
             pass
 
         try:
-            if not self.related_history:
-                # Append the system prompt to the history, for multi turn chat.
-                content = _related_system_prompt_zh if contains_chinese(query) else _related_system_prompt
-                self.related_history.append({"role": "system", "content": content})
             prompt = _related_qa_prompt_zh if contains_chinese(query) else _related_qa_prompt
             qa_prompt = prompt.format(
                 context="\n\n".join([c["snippet"] for c in contexts])
@@ -584,7 +581,7 @@ class RAG(Photon):
             )
             self.question_history = self.reduce_tokens(self.question_history)
             # Append the user question to the rewrite question history.
-            self.question_history.append({"role": "user", "content": user_prompt})
+            self.question_history.append({"role": "user", "content": query})
 
             new_question = response.choices[0].message.content
             logger.debug(f"New questions: {new_question}")
@@ -614,7 +611,7 @@ class RAG(Photon):
         return history
 
     def _raw_stream_response(
-            self, contexts, llm_response, related_questions_future, new_question_future
+            self, contexts, llm_response, related_questions_future
     ) -> Generator[str, None, None]:
         """
         A generator that yields the raw stream response. You do not need to call
@@ -656,25 +653,16 @@ class RAG(Photon):
             yield "\n\n__RELATED_QUESTIONS__\n\n"
             yield result
 
-        # Fourth, yield the rewrite question.
-        if new_question_future is not None:
-            new_question = new_question_future.result()
-            if new_question:
-                self.question_history.append({"role": "assistant", "content": new_question})
-                logger.debug(f"rewrite question history: {self.question_history}")
-            yield "\n\n__REWRITE_QUESTION__\n\n"
-            yield new_question
-
     def stream_and_upload_to_kv(
-            self, contexts, llm_response, related_questions_future, search_uuid, new_question_future
-    ) -> Generator[str, None, None]:
+            self, contexts, llm_response, related_questions_future, search_uuid
+    ):
         """
         Streams the result and uploads to KV.
         """
         # First, stream and yield the results.
         all_yielded_results = []
         for result in self._raw_stream_response(
-                contexts, llm_response, related_questions_future, new_question_future
+                contexts, llm_response, related_questions_future
         ):
             all_yielded_results.append(result)
             yield result
@@ -707,6 +695,16 @@ class RAG(Photon):
         # the user to share a searched link to others and have others see the same result.
         if search_uuid:
             try:
+                # Update search uuid: query + backend + llm
+                search_uuid = "_".join([
+                    query.strip(),
+                    self.backend,
+                    self.llm_type,
+                    self.model,
+                    os.environ.get("KV_NAME", ""),
+                    str(self.should_do_rewrite_question),
+                    str(self.enable_history)
+                ])
                 result = self.kv.get(search_uuid)
 
                 def str_to_generator(result: str) -> Generator[str, None, None]:
@@ -735,19 +733,34 @@ class RAG(Photon):
         query = query or _default_query
         # Basic attack protection: remove "[INST]" or "[/INST]" from the query
         query = re.sub(r"\[/?INST\]", "", query)
+        if not self.enable_history:
+            self.history = []
+            self.related_history = []
+            self.question_history = []
 
         try:
             client = self.local_client()
             # Rewrite query if needed, seed new query to search engine.
-            if self.should_do_rewrite_question and self.history:
+            if self.should_do_rewrite_question:
+                if not self.question_history:
+                    # Append the system prompt to the history, for multi turn chat.
+                    content = _rewrite_question_system_prompt_zh if contains_chinese(
+                        query) else _rewrite_question_system_prompt
+                    self.question_history.append({"role": "system", "content": content})
                 new_question_future = self.executor.submit(self.get_rewrite_question, query)
             else:
                 new_question_future = None
-            new_query = new_question_future.result() if new_question_future is not None else query
-            if new_query != query:
-                contexts = self.search_function(new_query)
-            else:
-                contexts = self.search_function(query)
+
+            # Determine the question to search for based on the result of 'new_question_future'
+            question_to_search = query
+            if new_question_future is not None:
+                new_question = new_question_future.result()
+                if new_question and new_question != query:
+                    question_to_search = new_question
+            self.question_history.append({"role": "assistant", "content": question_to_search})
+            logger.debug(f"rewrite question history: {self.question_history}")
+            # Search contexts based on the determined question
+            contexts = self.search_function(question_to_search)
             logger.debug(f"query: {query}, search api results num: {len(contexts)}")
             if not self.history:
                 # Append the system prompt to the history, for multi turn chat.
@@ -774,6 +787,10 @@ class RAG(Photon):
             # Append the user question to the history.
             self.history.append({"role": "user", "content": query})
             if self.should_do_related_questions and generate_related_questions:
+                if not self.related_history:
+                    # Append the system prompt to the history, for multi turn chat.
+                    content = _related_system_prompt_zh if contains_chinese(query) else _related_system_prompt
+                    self.related_history.append({"role": "system", "content": content})
                 # While the answer is being generated, we can start generating
                 # related questions as a future.
                 related_questions_future = self.executor.submit(self.get_related_questions, query, contexts)
@@ -785,7 +802,7 @@ class RAG(Photon):
 
         return StreamingResponse(
             self.stream_and_upload_to_kv(
-                contexts, llm_response, related_questions_future, search_uuid, new_question_future
+                contexts, llm_response, related_questions_future, search_uuid
             ),
             media_type="text/html",
         )
