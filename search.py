@@ -391,7 +391,7 @@ class RAG(Photon):
             # On the lepton platform, allow web access when you are logged in.
             "LEPTON_ENABLE_AUTH_BY_COOKIE": "true",
             # If you want to enable history, set this to true. Otherwise, set it to false.
-            "ENABLE_HISTORY": "true",
+            "ENABLE_HISTORY": "false",
             # If you are using openai, specify the base url, e.g. https://api.openai.com/v1
             "OPENAI_BASE_URL": "https://api.openai.com/v1",
 
@@ -762,8 +762,9 @@ class RAG(Photon):
                 new_question = new_question_future.result()
                 if new_question and new_question != query:
                     question_to_search = new_question
-            self.question_history.append({"role": "assistant", "content": question_to_search})
-            logger.debug(f"rewrite question history: {self.question_history}")
+                if self.should_do_rewrite_question:
+                    self.question_history.append({"role": "assistant", "content": question_to_search})
+                    logger.debug(f"rewrite question history: {self.question_history}")
             # Search contexts based on the determined question
             contexts = self.search_function(question_to_search)
             logger.debug(f"query: {query}, search api results num: {len(contexts)}")
