@@ -48,7 +48,6 @@ You have three options for Google Search: you can use the [SearchApi Google Sear
 > Running the following commands to set up them automatically.
 
 ```shell
-pip install -U leptonai && lep login
 pip install -r requirements.txt
 ```
 
@@ -61,6 +60,7 @@ cd web && npm install && npm run build
 ```
 2. Run server with Lepton API
 ```shell
+lep login
 python search.py
 ```
 
@@ -107,9 +107,8 @@ Learn more about `lep photon` [here](https://www.lepton.ai/docs).
 
 #### Deployment Configurations
 
-Here are the configurations you can set for your deployment:
-* Name: The name of your deployment, like "my-search"
-* Resource Shape: most of heavy lifting will be done by the LLM server and the search engine API, so you can choose a small resource shape. `cpu.small` is usually good enough.
+Here are the configurations you can set for your deployment, see `search.py`:
+* `resource_shape`: most of heavy lifting will be done by the LLM server and the search engine API, so you can choose a small resource shape. `cpu.small` is usually good enough.
 
 Then, set the following environmental variables.
 

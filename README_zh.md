@@ -56,7 +56,6 @@
 
 
 ```shell
-pip install -U leptonai && lep login
 pip install -r requirements.txt
 ```
 
@@ -68,15 +67,18 @@ pip install -r requirements.txt
 cd web && npm install && npm run build
 ```
 
-2. 运行服务器
-
+2. 基于Lepton API运行服务
+```shell
+lep login
+python search.py
+```
+或者，你可以使用Bing或者Google Search的API运行服务。
+#### 使用Bing搜索的API
 ```shell
 export BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
 BACKEND=BING python search.py
 ```
-或者，你可以使用Google Search API运行服务器。
-
-#### 使用 Google 搜索API 
+#### 使用Google搜索的API 
 
 对于使用SearchApi的Google搜索：
 
@@ -115,17 +117,16 @@ lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --
 
 #### 部署配置
 
-以下是部署配置：
+以下是部署配置，见`search.py`：
 
-* 名称：您的部署名称，如 "my-search"
-* 资源形状：大多数重型工作将由LLM服务器和搜索引擎API完成，因此您可以选择一个小资源形状。`cpu.small`通常就足够好。
+* `resource_shape`：大多数重型工作将由LLM服务器和搜索引擎API完成，因此您可以选择一个小资源形状。`cpu.small`通常就足够好。
 
 然后，设置以下环境变量。
 
 * `BACKEND`：要使用的搜索后端。如果你没有设置bing或google，只需使用`LEPTON`尝试演示。否则，请做 `BING`, `GOOGLE`, `SERPER` 或者 `SEARCHAPI`
 * `LLM_TYPE`：要使用的LLM类型。如果您正在使用Lepton，请将其设置为`lepton`。否则，将其设置为`openai`。
 * `LLM_MODEL`: 运行的LLM模型。我们建议使用`mixtral-8x7b`, 但如果你想尝试其他模型, 你可以尝试在LeptonAI上托管的那些, 比如说, `llama2-70b`, `llama2-13b`, `llama2-7b`. 注意小模型可能效果不佳
-* `KV_NAME`: 存储搜索结果所用到的Lepton KV. 可以使用默认值 'search-with-lepton'
+* `KV_NAME`: 存储搜索结果所用到的Lepton KV. 可以使用默认值`smart-search`
 * `RELATED_QUESTIONS`: 是否生成相关问题. 如果设定为'true', 搜索引擎会为你生成相关问题. 否则就不会
 * `REWRITE_QUESTION`：是否重写问题。如果您将此设置为`true`，LLM将重写问题并将其发送到搜索引擎。否则，它不会
 * `GOOGLE_SEARCH_CX`: 如果正在使用谷歌官方API，请指定搜索cx。否则请留空
