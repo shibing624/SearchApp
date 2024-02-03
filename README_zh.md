@@ -43,12 +43,12 @@ pip install -r requirements.txt
 1. 构建前端web
 
 两种方法构建前端：
-1）下载打包好的前端ui，https://github.com/shibing624/SmartSearch/releases/download/0.1.0/ui.zip 解压到项目根目录直接使用。
-2）自己使用npm构建前端（需要nodejs 18以上版本）
-```shell
-cd web && npm install && npm run build
-```
-输出：项目根目录产出`ui`文件夹，包含前端静态文件。
+    1）下载打包好的前端ui，https://github.com/shibing624/SmartSearch/releases/download/0.1.0/ui.zip 解压到项目根目录直接使用。
+    2）自己使用npm构建前端（需要nodejs 18以上版本）
+    ```shell
+    cd web && npm install && npm run build
+    ```
+    输出：项目根目录产出`ui`文件夹，包含前端静态文件。
 
 2. 基于Lepton API运行服务
 
