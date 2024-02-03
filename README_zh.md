@@ -40,17 +40,17 @@ pip install -r requirements.txt
 
 ## 运行
 
-1. 构建前端web
+### 1. 构建前端web
 
 两种方法构建前端：
-    1）下载打包好的前端ui，https://github.com/shibing624/SmartSearch/releases/download/0.1.0/ui.zip 解压到项目根目录直接使用。
-    2）自己使用npm构建前端（需要nodejs 18以上版本）
-    ```shell
-    cd web && npm install && npm run build
-    ```
-    输出：项目根目录产出`ui`文件夹，包含前端静态文件。
+1. 下载打包好的前端ui，https://github.com/shibing624/SmartSearch/releases/download/0.1.0/ui.zip 解压到项目根目录直接使用。
+2. 自己使用npm构建前端（需要nodejs 18以上版本）
+```shell
+cd web && npm install && npm run build
+```
+输出：项目根目录产出`ui`文件夹，包含前端静态文件。
 
-2. 基于Lepton API运行服务
+### 2. 基于Lepton API运行服务
 
 > [!NOTE]
 > 我们推荐使用内置llm和kv函数。
@@ -60,8 +60,9 @@ pip install -r requirements.txt
 lep login
 python search.py
 ```
-或者，你可以使用Bing或者Google Search的API运行服务。
-#### 使用Bing搜索的API
+## 使用搜索引擎API
+你可以使用Bing或者Google Search的API运行服务。
+### 使用Bing搜索的API
 
 要使用Bing Web Search API，请访问[此链接](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api)获取您的Bing订阅密钥。
 
@@ -69,7 +70,7 @@ python search.py
 export BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
 BACKEND=BING python search.py
 ```
-#### 使用Google搜索的API 
+### 使用Google搜索的API 
 你有三种方法使用Google Search API：
 1. 选择使用来自SearchApi的[SearchApi Google Search API](https://www.searchapi.io/)
 2. 选择使用Serper的 [Serper Google Search API](https://www.serper.dev)
@@ -99,7 +100,7 @@ BACKEND=GOOGLE python search.py
 好了，现在你的搜索应用正在http://0.0.0.0:8080上运行。
 
 ## 使用OpenAI LLM
-如果你追求更好搜索效果，你可以使用OpenAI的LLM模型`gpt-4`。
+如果你追求更好LLM生成效果，你可以使用OpenAI的LLM模型`gpt-4`。
 
 ```shell
 export SERPER_SEARCH_API_KEY=YOUR_SERPER_API_KEY
@@ -108,7 +109,7 @@ export OPENAI_BASE_URL=https://xxx/v1
 BACKEND=SERPER LLM_TYPE=OPENAI LLM_MODEL=gpt-4 python search.py
 ```
 
-### 配置
+## 配置
 
 以下是部署配置，见`search.py`：
 
