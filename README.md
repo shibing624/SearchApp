@@ -31,34 +31,33 @@
 - Support for follow-up questions, continuous Q&A
 - Supports query analysis, rewrites queries based on context for precise search
 
-## Setup Search Engine API
-There are two default supported search engines: Bing and Google.
- 
-### Bing Search
-To use the Bing Web Search API, please visit [this link](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api) to obtain your Bing subscription key.
 
-### Google Search
-You have three options for Google Search: you can use the [SearchApi Google Search API](https://www.searchapi.io/) from SearchApi, 
-[Serper Google Search API](https://www.serper.dev) from Serper, or opt for the [Programmable Search Engine](https://developers.google.com/custom-search) provided by Google.
-
-## Setup LLM and KV
-
-> [!NOTE]
-> We recommend using the built-in llm and kv functions with Lepton. 
-> Running the following commands to set up them automatically.
+## Install requirements
 
 ```shell
 pip install -r requirements.txt
 ```
 
+## Run
 
-## Build and Run
+1. Build the front-end web
 
-1. . Build web
+There are two ways to build the front end:
+
+1) Download the pre-packaged front-end UI from https://github.com/shibing624/SmartSearch/releases/download/0.1.0/ui.zip and unzip it directly into the project root directory for use.
+
+2) Use npm to build the front end yourself (requires nodejs version 18 or above)
+
 ```shell
 cd web && npm install && npm run build
 ```
+
+Output: The project root directory produces a `ui` folder, which contains static files for the frontend.
 2. Run server with Lepton API
+> [!NOTE]
+> We recommend using the built-in llm and kv functions with Lepton. 
+> Running the following commands to set up them automatically.
+
 ```shell
 lep login
 python search.py
@@ -66,6 +65,8 @@ python search.py
 
 alternatively, you can run server with Bing Search API or Google Search API.
 #### Using Bing Search API
+To use the Bing Web Search API, please visit [this link](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api) to obtain your Bing subscription key.
+
 ```shell
 export BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
 BACKEND=BING python search.py
@@ -73,6 +74,10 @@ BACKEND=BING python search.py
 
 
 #### Using Google Search Api
+You have three options for Google Search: you can use the [SearchApi Google Search API](https://www.searchapi.io/) from SearchApi, 
+[Serper Google Search API](https://www.serper.dev) from Serper, or opt for the [Programmable Search Engine](https://developers.google.com/custom-search) provided by Google.
+
+
 For Google Search using SearchApi:
 ```shell
 export SEARCHAPI_API_KEY=YOUR_SEARCHAPI_API_KEY
@@ -94,16 +99,16 @@ BACKEND=GOOGLE python search.py
 
 ok, now your search app running on http://0.0.0.0:8080
 
-## Deploy
+## Using OpenAI LLM
 
-You can deploy your own version via
+If you are pursuing better search results, you can use OpenAI's LLM model `gpt-4`.
 
 ```shell
-lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --env BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
+export SERPER_SEARCH_API_KEY=YOUR_SERPER_API_KEY
+export OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+export OPENAI_BASE_URL=https://xxx/v1
+BACKEND=SERPER LLM_TYPE=OPENAI LLM_MODEL=gpt-4 python search.py
 ```
-
-Learn more about `lep photon` [here](https://www.lepton.ai/docs).
-
 
 #### Deployment Configurations
 

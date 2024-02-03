@@ -31,54 +31,49 @@
 - 支持问题追问，连续问答
 - 支持query分析，基于上下文重写query，精准搜索
 
-
-## 设置搜索引擎API
-
-默认支持两种搜索引擎：Bing和Google。
-
-### Bing 搜索 
-
-要使用Bing Web Search API，请访问[此链接](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api)获取您的Bing订阅密钥。
-
-### Google 搜索 
-
-你有三个选择用于Google Search：
-1. 选择使用来自SearchApi的[SearchApi Google Search API](https://www.searchapi.io/)
-2. 选择使用Serper的 [Serper Google Search API](https://www.serper.dev)
-3. 选择由Google提供的[Programmable Search Engine](https://developers.google.com/custom-search)
-
-## 设置LLM和KV
-
-
-> [!NOTE]
-> 我们推荐使用内置llm和kv函数。
-> 运行以下命令以自动设置它们。
-
+## 安装依赖
 
 ```shell
 pip install -r requirements.txt
 ```
 
 
-## 构建和运行
+## 运行
 
-1. 构建web
+1. 构建前端web
+
+两种方法构建前端：
+1）下载打包好的前端ui，https://github.com/shibing624/SmartSearch/releases/download/0.1.0/ui.zip 解压到项目根目录直接使用。
+2）自己使用npm构建前端（需要nodejs 18以上版本）
 ```shell
 cd web && npm install && npm run build
 ```
+输出：项目根目录产出`ui`文件夹，包含前端静态文件。
 
 2. 基于Lepton API运行服务
+
+> [!NOTE]
+> 我们推荐使用内置llm和kv函数。
+> 运行以下命令以自动设置它们。
+
 ```shell
 lep login
 python search.py
 ```
 或者，你可以使用Bing或者Google Search的API运行服务。
 #### 使用Bing搜索的API
+
+要使用Bing Web Search API，请访问[此链接](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api)获取您的Bing订阅密钥。
+
 ```shell
 export BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
 BACKEND=BING python search.py
 ```
 #### 使用Google搜索的API 
+你有三种方法使用Google Search API：
+1. 选择使用来自SearchApi的[SearchApi Google Search API](https://www.searchapi.io/)
+2. 选择使用Serper的 [Serper Google Search API](https://www.serper.dev)
+3. 选择由Google提供的[Programmable Search Engine](https://developers.google.com/custom-search)
 
 对于使用SearchApi的Google搜索：
 
@@ -103,19 +98,17 @@ BACKEND=GOOGLE python search.py
 ```
 好了，现在你的搜索应用正在http://0.0.0.0:8080上运行。
 
+## 使用OpenAI LLM
+如果你追求更好搜索效果，你可以使用OpenAI的LLM模型`gpt-4`。
 
-## 部署 
-除了上面的本地部署服务外，
-
-您可以通过以下方式在lepton部署自己的版本：
- 
 ```shell
-lep photon run -n search-with-lepton-modified -m search.py --env BACKEND=BING --env BING_SEARCH_V7_SUBSCRIPTION_KEY=YOUR_BING_SUBSCRIPTION_KEY
+export SERPER_SEARCH_API_KEY=YOUR_SERPER_API_KEY
+export OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+export OPENAI_BASE_URL=https://xxx/v1
+BACKEND=SERPER LLM_TYPE=OPENAI LLM_MODEL=gpt-4 python search.py
 ```
- 
-了解更多关于`lep photon` 的信息 [这里](https://www.lepton.ai/docs)。
 
-#### 部署配置
+### 配置
 
 以下是部署配置，见`search.py`：
 
