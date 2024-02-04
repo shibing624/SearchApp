@@ -6,7 +6,7 @@ import os
 import re
 import threading
 import traceback
-from typing import Annotated, List, Generator, Optional
+from typing import List, Generator, Optional
 
 import httpx
 import leptonai
@@ -20,6 +20,11 @@ from leptonai.photon import Photon, StaticFiles
 from leptonai.photon.types import to_bool
 from leptonai.util import tool
 from loguru import logger
+
+try:
+    from typing import Annotated
+except ImportError:
+    from typing_extensions import Annotated
 
 ################################################################################
 # Constant values for the RAG model.
