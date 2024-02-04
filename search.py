@@ -24,6 +24,7 @@ from loguru import logger
 try:
     from typing import Annotated
 except ImportError:
+    # Python 3.8 compatibility, need `pip install typing-extensions`
     from typing_extensions import Annotated
 
 ################################################################################
