@@ -1,3 +1,4 @@
+import argparse
 import concurrent.futures
 import datetime
 import glob
@@ -408,7 +409,6 @@ class RAG(Photon):
             "ENABLE_HISTORY": "false",
             # If you are using openai, specify the base url, e.g. https://api.openai.com/v1
             "OPENAI_BASE_URL": "https://api.openai.com/v1",
-
         },
         # Secrets you need to have: search api subscription key, and lepton
         # workspace token to query lepton's llama models.
@@ -841,5 +841,9 @@ class RAG(Photon):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="RAG Photon")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to run the photon.")
+    parser.add_argument("--port", type=int, default=8081, help="Port to run the photon.")
+    args = parser.parse_args()
     rag = RAG()
-    rag.launch()
+    rag.launch(host=args.host, port=args.port)

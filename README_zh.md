@@ -60,6 +60,7 @@ cd web && npm install && npm run build
 lep login
 python search.py
 ```
+好了，现在你的搜索应用正在运行：http://0.0.0.0:8081
 
 - 提供在线colab运行服务demo：[demo.ipynb](https://github.com/shibing624/SmartSearch/blob/main/demo.ipynb)，其对应的colab：[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shibing624/SmartSearch/blob/main/demo.ipynb)
 ## 使用搜索引擎API
@@ -99,7 +100,6 @@ export GOOGLE_SEARCH_API_KEY=YOUR_GOOGLE_SEARCH_API_KEY
 export GOOGLE_SEARCH_CX=YOUR_GOOGLE_SEARCH_ENGINE_ID
 BACKEND=GOOGLE python search.py
 ```
-好了，现在你的搜索应用正在http://0.0.0.0:8080上运行。
 
 ## 使用OpenAI LLM
 如果你追求更好LLM生成效果，你可以使用OpenAI的LLM模型`gpt-4`。
