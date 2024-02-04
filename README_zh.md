@@ -60,6 +60,8 @@ cd web && npm install && npm run build
 lep login
 python search.py
 ```
+
+- 提供在线colab运行服务demo：[demo.ipynb](https://github.com/shibing624/SmartSearch/blob/main/demo.ipynb)，其对应的colab：[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shibing624/SmartSearch/blob/main/demo.ipynb)
 ## 使用搜索引擎API
 你可以使用Bing或者Google Search的API运行服务。
 ### 使用Bing搜索的API

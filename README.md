@@ -60,6 +60,9 @@ lep login
 python search.py
 ```
 
+- Here is the demo for our online Colab execution service: [demo.ipynb](https://github.com/shibing624/SmartSearch/blob/main/demo.ipynb), it's Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shibing624/SmartSearch/blob/main/demo.ipynb)
+
+
 ## Using Search Engine API
 you can using Bing Search API or Google Search API.
 ### Using Bing Search API
