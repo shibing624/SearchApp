@@ -1,4 +1,5 @@
 import concurrent.futures
+import datetime
 import glob
 import json
 import os
@@ -73,12 +74,14 @@ _rag_system_prompt_zh = """你是一个大型的语言AI助手。当用户提出
 _rag_qa_prompt = """Here are the set of contexts:
 
 {context}
+Current date: {current_date}
 
 Please answer the question with contexts, but don't blindly repeat the contexts verbatim. Please cite the contexts with the reference numbers, in the format [citation:x]. And here is the user question:
 """
 _rag_qa_prompt_zh = """以下是一组上下文：
 
 {context}
+当前日期: {current_date}
 
 基于上下文回答问题，不要盲目地逐字重复上下文。请以[citation:x]的格式引用上下文。这是用户的问题：
 """
@@ -147,6 +150,11 @@ def is_chinese(uchar):
 def contains_chinese(string):
     """Check if the string contains Chinese characters."""
     return any(is_chinese(c) for c in string)
+
+
+def replace_today(prompt):
+    today = datetime.datetime.today().strftime("%Y-%m-%d")
+    return prompt.replace("{current_date}", today)
 
 
 def search_with_bing(query: str, subscription_key: str):
@@ -773,6 +781,7 @@ class RAG(Photon):
                 content = _rag_system_prompt_zh if contains_chinese(query) else _rag_system_prompt
                 self.history.append({"role": "system", "content": content})
             prompt = _rag_qa_prompt_zh if contains_chinese(query) else _rag_qa_prompt
+            prompt = replace_today(prompt)
             qa_prompt = prompt.format(
                 context="\n\n".join(
                     [f"[[citation:{i + 1}]] {c['snippet']}" for i, c in enumerate(contexts)]
