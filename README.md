@@ -29,6 +29,7 @@
 - Shareable, cached search results
 - Support for follow-up questions, continuous Q&A
 - Supports query analysis, rewrites queries based on context for precise search
+- Support DDGSAPI Search Service
 
 
 ## Install requirements
