@@ -29,6 +29,7 @@
 - 可分享，缓存搜索结果
 - 支持问题追问，连续问答
 - 支持query分析，基于上下文重写query，精准搜索
+- 支持DDGS Search API service
 
 ## 安装依赖
 

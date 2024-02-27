@@ -211,6 +211,25 @@ def search_with_google(query: str, subscription_key: str, cx: str):
         return []
     return contexts
 
+def ddg_search_text(query: str, max_results=5):
+    reference_results = []
+    search_results = []
+    with DDGS() as ddgs:
+        ddgs_gen = ddgs.text(query, backend="lite",timelimit="d, w, m, y")
+        for r in islice(ddgs_gen, max_results):
+            search_results.append(r)
+    for idx, result in enumerate(search_results):
+        logger.debug(f"搜索结果{idx + 1}：{result}")
+        if result["body"] and result["href"]:
+            reference_results.append({
+                    "name": result["title"],
+                    "url": result["href"],
+                    "snippet": result["body"]
+
+            })
+    logger.info(f"ddgs search result:{reference_results}")
+    return reference_results
+
 
 def search_with_serper(query: str, subscription_key: str):
     """
@@ -501,6 +520,12 @@ class RAG(Photon):
             self.search_function = lambda query: search_with_searchapi(
                 query,
                 self.search_api_key,
+            )
+        elif self.backend == "DDGSAPI":
+            from duckduckgo_search import DDGS
+            self.search_function = lambda query: ddg_search_text(
+                query,
+                max_results=10
             )
         else:
             raise RuntimeError("Backend must be LEPTON, BING, GOOGLE, SERPER or SEARCHAPI.")
