@@ -21,7 +21,6 @@ from leptonai.photon import Photon, StaticFiles
 from leptonai.photon.types import to_bool
 from leptonai.util import tool
 from loguru import logger
-from duckduckgo_search import DDGS
 
 try:
     from typing import Annotated
@@ -523,6 +522,7 @@ class RAG(Photon):
                 self.search_api_key,
             )
         elif self.backend == "DDGSAPI":
+            from duckduckgo_search import DDGS
             self.search_function = lambda query: ddg_search_text(
                 query,
                 max_results=10
