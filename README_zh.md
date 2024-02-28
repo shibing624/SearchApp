@@ -24,12 +24,11 @@
 ## Features
 - 内置支持开源LLM，可用本地模型搭建API
 - 支持OpenAI LLM API，可用`gpt-4`
-- 内置支持bing/google搜索引擎
+- 内置支持bing/google/DDGS搜索引擎
 - 可定制的美观UI界面
 - 可分享，缓存搜索结果
 - 支持问题追问，连续问答
 - 支持query分析，基于上下文重写query，精准搜索
-- 支持DDGS Search API service
 
 ## 安装依赖
 
@@ -119,7 +118,7 @@ BACKEND=SERPER LLM_TYPE=OPENAI LLM_MODEL=gpt-4 python search.py
 
 然后，设置以下环境变量。
 
-* `BACKEND`：要使用的搜索后端。如果你没有设置bing或google，只需使用`LEPTON`尝试演示。否则，请做 `BING`, `GOOGLE`, `SERPER` 或者 `SEARCHAPI`
+* `BACKEND`：要使用的搜索后端。如果你不用bing或google，只需使用`LEPTON`尝试演示。否则，请设置为 `BING`, `GOOGLE`, `SERPER`, `SEARCHAPI`，并搭配填写相应的API_KEY，或者使用开源搜索引擎`DDGS`。
 * `LLM_TYPE`：要使用的LLM类型。如果您正在使用Lepton，请将其设置为`lepton`。否则，将其设置为`openai`。
 * `LLM_MODEL`: 运行的LLM模型。我们建议使用`mixtral-8x7b`, 但如果你想尝试其他模型, 你可以尝试在LeptonAI上托管的那些, 比如说, `llama2-70b`, `llama2-13b`, `llama2-7b`. 注意小模型可能效果不佳
 * `KV_NAME`: 存储搜索结果所用到的Lepton KV. 可以使用默认值`smart-search`

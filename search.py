@@ -7,6 +7,7 @@ import os
 import re
 import threading
 import traceback
+from itertools import islice
 from typing import List, Generator, Optional
 
 import httpx
@@ -211,24 +212,26 @@ def search_with_google(query: str, subscription_key: str, cx: str):
         return []
     return contexts
 
-def ddg_search_text(query: str, max_results=5):
-    reference_results = []
+
+def search_with_ddgs(query: str):
+    """
+    Search with ddgs and return the contexts.
+    """
+    from duckduckgo_search import DDGS
+    contexts = []
     search_results = []
     with DDGS() as ddgs:
-        ddgs_gen = ddgs.text(query, backend="lite",timelimit="d, w, m, y")
-        for r in islice(ddgs_gen, max_results):
+        ddgs_gen = ddgs.text(query, backend="lite", timelimit="d, w, m, y")
+        for r in islice(ddgs_gen, 0, REFERENCE_COUNT):
             search_results.append(r)
     for idx, result in enumerate(search_results):
-        logger.debug(f"搜索结果{idx + 1}：{result}")
         if result["body"] and result["href"]:
-            reference_results.append({
-                    "name": result["title"],
-                    "url": result["href"],
-                    "snippet": result["body"]
-
+            contexts.append({
+                "name": result["title"],
+                "url": result["href"],
+                "snippet": result["body"]
             })
-    logger.info(f"ddgs search result:{reference_results}")
-    return reference_results
+    return contexts
 
 
 def search_with_serper(query: str, subscription_key: str):
@@ -521,14 +524,10 @@ class RAG(Photon):
                 query,
                 self.search_api_key,
             )
-        elif self.backend == "DDGSAPI":
-            from duckduckgo_search import DDGS
-            self.search_function = lambda query: ddg_search_text(
-                query,
-                max_results=10
-            )
+        elif self.backend == "DDGS":
+            self.search_function = lambda query: search_with_ddgs(query)
         else:
-            raise RuntimeError("Backend must be LEPTON, BING, GOOGLE, SERPER or SEARCHAPI.")
+            raise RuntimeError("Backend must be LEPTON, BING, GOOGLE, SERPER, SEARCHAPI or DDGS.")
         logger.info(f"Using Search API backend: {self.backend}")
         self.llm_type = os.environ["LLM_TYPE"].upper()
         logger.info(f"Using LLM type: {self.llm_type}")

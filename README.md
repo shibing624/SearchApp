@@ -24,12 +24,11 @@
 ## Features
 - Built-in support for LLM, you can build API with local model
 - Support OpenAI LLMs, such as `gpt-4`
-- Built-in support for search engine
+- Built-in support for search engine, support bing/google/DDGS
 - Customizable pretty UI interface
 - Shareable, cached search results
 - Support for follow-up questions, continuous Q&A
 - Supports query analysis, rewrites queries based on context for precise search
-- Support DDGSAPI Search Service
 
 
 ## Install requirements
@@ -117,7 +116,7 @@ Here are the configurations you can set for your deployment, see `search.py`:
 
 Then, set the following environmental variables.
 
-* `BACKEND`: the search backend to use. If you don't have bing or google set up, simply use `LEPTON` to try the demo. Otherwise, do `BING`, `GOOGLE`, `SERPER` or `SEARCHAPI`.
+* `BACKEND`: the search backend to use. If you don't have bing or google set up, simply use `LEPTON` to try the demo. Otherwise, do `BING`, `GOOGLE`, `SERPER`, `SEARCHAPI`, or use `DDGS`.
 * `LLM_TYPE`: the LLM type to use. If you are using Lepton, set it to `lepton`. Otherwise, set it to `openai`.
 * `LLM_MODEL`: the LLM model to run. We recommend using `mixtral-8x7b`, but if you want to experiment other models, you can try the ones hosted on LeptonAI, for example, `llama2-70b`, `llama2-13b`, `llama2-7b`. Note that small models won't work that well.
 * `KV_NAME`: the Lepton KV to use to store the search results. You can use the default `search-with-lepton`.
