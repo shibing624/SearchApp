@@ -149,6 +149,7 @@ BACKEND=SERPER LLM_TYPE=OPENAI LLM_MODEL=gpt-4 python search.py
 - 邮件我：xuming: xuming624@qq.com
 - 微信我：加我*微信号：xuming624, 备注：姓名-公司-NLP* 进NLP交流群。
 
+<img src="docs/wechat.jpeg" width="200" />
 
 ## License
 授权协议为 [The Apache License 2.0](LICENSE)，可免费用做商业用途。请在产品说明中附加SmartSearch的链接和授权协议。

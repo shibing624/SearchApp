@@ -148,6 +148,8 @@ In addition, you will need to set the following secrets:
 - Email: xuming: xuming624@qq.com
 - Wechat: Add my *Wechat ID: xuming624, note: name-company-NLP* to join the NLP discussion group.
 
+<img src="docs/wechat.jpeg" width="200" />
+
 ## License
 
 The license agreement is [The Apache License 2.0](LICENSE), which can be used for commercial purposes for free. Please include SmartSearch's link and license agreement in the product description.
