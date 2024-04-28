@@ -5,7 +5,7 @@
     <img src="https://github.com/shibing624/SmartSearch/blob/main/docs/icon.svg" height="50" alt="Logo">
     </a>
     <br/>
-    <a href="https://search.mulanai.com/" target="_blank"> Online Demo </a>
+    <a href="https://chat.mulanai.com/" target="_blank"> Online Demo </a>
     <br/>
     <img width="70%" src="https://github.com/shibing624/SmartSearch/blob/main/docs/screenshot.png">
 </div>
