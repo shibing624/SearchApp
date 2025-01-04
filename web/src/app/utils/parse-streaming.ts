@@ -2,6 +2,12 @@ import { Relate } from "@/app/interfaces/relate";
 import { Source } from "@/app/interfaces/source";
 // Get the base URL for API calls
 const getBaseUrl = () => {
+  // In production, we should use the actual API endpoint
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  
+  // In development, use the current window location
   const url = new URL(window.location.href);
   return `${url.protocol}//${url.hostname}${url.port ? `:${url.port}` : ''}`;
 };
