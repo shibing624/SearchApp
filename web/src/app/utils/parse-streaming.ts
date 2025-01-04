@@ -1,8 +1,10 @@
 import { Relate } from "@/app/interfaces/relate";
 import { Source } from "@/app/interfaces/source";
-
 // Get the base URL for API calls
-const getBaseUrl = () => process.env.NEXT_PUBLIC_API_URL || '';
+const getBaseUrl = () => {
+  const url = new URL(window.location.href);
+  return `${url.protocol}//${url.hostname}${url.port ? `:${url.port}` : ''}`;
+};
 
 const getSearchUrl = () => `${getBaseUrl()}/search`;
 const getGenerateUrl = () => `${getBaseUrl()}/generate`;

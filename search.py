@@ -601,7 +601,7 @@ class SearchAPI(FastAPI):
             completion = await client.chat.completions.create(
                 model=self.config.model,
                 messages=messages,
-                max_tokens=1024,
+                max_tokens=2048,
                 stream=True
             )
 
@@ -609,7 +609,6 @@ class SearchAPI(FastAPI):
             async for chunk in completion:
                 if chunk.choices and chunk.choices[0].delta.content:
                     content = chunk.choices[0].delta.content
-                    logger.debug(f"delta content: {content}")
                     response_text += content
                     yield content
 
