@@ -20,7 +20,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/shibing624/SmartSearch.svg)](https://github.com/shibing624/SmartSearch/issues)
 [![Wechat Group](https://img.shields.io/badge/wechat-group-green.svg?logo=wechat)](#Contact)
 
-```markdown
 ## Features
 - Supports models from various large model vendors, including OpenAI/ZhipuAI API, recommended to use the free `glm-4-flash`
 - Built-in support for google serper/DDGS/ZhipuAI SearchPro search engines (free, recommended)
