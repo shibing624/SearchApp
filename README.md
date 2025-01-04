@@ -41,7 +41,7 @@ python search.py
 ```
 Now your search application is running at: http://0.0.0.0:8081
 
-
+- Use FastAPI serve：http://0.0.0.0:8081/docs
 - Provides an online colab demo service: [demo.ipynb](https://github.com/shibing624/SearchGPT/blob/main/demo.ipynb), corresponding colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shibing624/SearchGPT/blob/main/demo.ipynb)
 
 ### Rebuild Frontend Web

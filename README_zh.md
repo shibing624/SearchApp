@@ -42,7 +42,7 @@ python search.py
 ```
 好了，现在你的搜索应用正在运行：http://0.0.0.0:8081
 
-
+- 查看FastAPI服务：http://0.0.0.0:8081/docs
 - 提供在线colab运行服务demo：[demo.ipynb](https://github.com/shibing624/SearchGPT/blob/main/demo.ipynb)，其对应的colab：[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shibing624/SearchGPT/blob/main/demo.ipynb)
 
 ### rebuild前端web
