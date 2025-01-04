@@ -177,7 +177,7 @@ node_modules/
 
 # production
 /build
-/ui
+#/ui
 
 # misc
 .DS_Store

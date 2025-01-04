@@ -8,26 +8,52 @@ import { parseStreaming } from "@/app/utils/parse-streaming";
 import { Annoyed } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 
-export const Result: FC<{ query: string; rid: string }> = ({ query, rid }) => {
+interface ResultProps {
+  query: string;
+  rid: string;
+  onError?: (status: number) => void;
+}
+
+export const Result: FC<ResultProps> = ({ query, rid, onError }) => {
   const [sources, setSources] = useState<Source[]>([]);
   const [markdown, setMarkdown] = useState<string>("");
   const [relates, setRelates] = useState<Relate[] | null>(null);
   const [error, setError] = useState<number | null>(null);
+
+  const handleMarkdownUpdate = (value: string | ((prev: string) => string)) => {
+    if (typeof value === 'function') {
+      setMarkdown(value);
+    } else {
+      setMarkdown(prev => prev + value);
+    }
+  };
+
+  const handleError = (status: number) => {
+    setError(status);
+    onError?.(status);
+  };
+
   useEffect(() => {
+    // 重置状态
+    setMarkdown("");
+    setSources([]);
+    setRelates(null);
+    setError(null);
+
     const controller = new AbortController();
     void parseStreaming(
       controller,
       query,
       rid,
       setSources,
-      setMarkdown,
+      handleMarkdownUpdate,
       setRelates,
-      setError,
+      handleError,
     );
     return () => {
       controller.abort();
     };
-  }, [query]);
+  }, [query, rid]);
   return (
     <div className="flex flex-col gap-8">
       <Answer markdown={markdown} sources={sources}></Answer>
