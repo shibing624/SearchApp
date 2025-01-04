@@ -1,23 +1,23 @@
-[**🇨🇳中文**](https://github.com/shibing624/SmartSearch/blob/main/README.md) | [**🌐English**](https://github.com/shibing624/SmartSearch/blob/main/README_en.md) 
+[**🇨🇳中文**](https://github.com/shibing624/SearchGPT/blob/main/README.md) | [**🌐English**](https://github.com/shibing624/SearchGPT/blob/main/README_en.md) 
 
 <div align="center">
-    <a href="https://github.com/shibing624/SmartSearch">
-    <img src="https://github.com/shibing624/SmartSearch/blob/main/docs/icon.svg" height="50" alt="Logo">
+    <a href="https://github.com/shibing624/SearchGPT">
+    <img src="https://github.com/shibing624/SearchGPT/blob/main/docs/icon.svg" height="50" alt="Logo">
     </a>
     <br/>
     <a href="https://chat.mulanai.com/" target="_blank"> Online Demo </a>
     <br/>
-    <img width="70%" src="https://github.com/shibing624/SmartSearch/blob/main/docs/screenshot.png">
+    <img width="70%" src="https://github.com/shibing624/SearchGPT/blob/main/docs/screenshot.png">
 </div>
 
 -----------------
 
-# SmartSearch: Build your own conversational search engine with LLMs
+# SearchGPT: Build your own conversational search engine with LLMs
 [![HF Models](https://img.shields.io/badge/Hugging%20Face-shibing624-green)](https://huggingface.co/shibing624)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![License Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![python_version](https://img.shields.io/badge/Python-3.8%2B-green.svg)](requirements.txt)
-[![GitHub issues](https://img.shields.io/github/issues/shibing624/SmartSearch.svg)](https://github.com/shibing624/SmartSearch/issues)
+[![GitHub issues](https://img.shields.io/github/issues/shibing624/SearchGPT.svg)](https://github.com/shibing624/SearchGPT/issues)
 [![Wechat Group](https://img.shields.io/badge/wechat-group-green.svg?logo=wechat)](#Contact)
 
 ## Features
