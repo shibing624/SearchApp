@@ -1,5 +1,8 @@
-hf-transfer==0.1.4
-leptonai
-loguru
+fastapi
+uvicorn
+httpx
 openai
-duckduckgo_search
+requests
+python-multipart
+loguru
+aiohttp

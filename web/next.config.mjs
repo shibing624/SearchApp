@@ -16,7 +16,7 @@ export default (phase, { defaultConfig }) => {
         return [
           {
             source: "/query",
-            destination: "http://localhost:8080/query" // Proxy to Backend
+            destination: "http://0.0.0.0:8081/query" // Proxy to Backend
           }
         ];
       }

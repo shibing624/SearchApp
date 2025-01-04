@@ -4,12 +4,24 @@ import { Source } from "@/app/interfaces/source";
 import { BookText } from "lucide-react";
 import { FC } from "react";
 
+const getDomain = (url: string): string => {
+  try {
+    if (!url) return '';
+    // Add protocol if missing
+    const urlWithProtocol = url.startsWith('http') ? url : `https://${url}`;
+    return new URL(urlWithProtocol).hostname;
+  } catch (e) {
+    console.warn('Invalid URL:', url);
+    return '';
+  }
+};
+
 const SourceItem: FC<{ source: Source; index: number }> = ({
   source,
   index,
 }) => {
   const { id, name, url } = source;
-  const domain = new URL(url).hostname;
+  const domain = getDomain(url);
   return (
     <div
       className="relative text-xs py-3 px-3 bg-zinc-100 hover:bg-zinc-200 rounded-lg flex flex-col gap-2"
