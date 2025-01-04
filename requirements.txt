@@ -3,6 +3,5 @@ uvicorn
 httpx
 openai
 requests
-python-multipart
 loguru
 aiohttp
