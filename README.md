@@ -46,9 +46,7 @@ Now your search application is running at: http://0.0.0.0:8081
 
 ### Rebuild Frontend Web
 
-Two ways to build the frontend:
-1. Download the packaged frontend UI, https://github.com/shibing624/SearchGPT/releases/download/0.1.0/ui.zip and unzip it to the project root directory for direct use.
-2. Build the frontend yourself using npm (requires nodejs version 18 or above)
+Build the frontend yourself using npm (requires nodejs version 18 or above)
 ```shell
 cd web && npm install && npm run build
 ```

@@ -46,10 +46,7 @@ python search.py
 - 提供在线colab运行服务demo：[demo.ipynb](https://github.com/shibing624/SearchGPT/blob/main/demo.ipynb)，其对应的colab：[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shibing624/SearchGPT/blob/main/demo.ipynb)
 
 ### rebuild前端web
-
-两种方法构建前端：
-1. 下载打包好的前端ui，https://github.com/shibing624/SearchGPT/releases/download/0.1.0/ui.zip 解压到项目根目录直接使用。
-2. 自己使用npm构建前端（需要nodejs 18以上版本）
+使用npm构建前端（需要nodejs 18以上版本）
 ```shell
 cd web && npm install && npm run build
 ```
