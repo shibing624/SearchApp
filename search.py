@@ -60,7 +60,7 @@ class Config:
 
     # 功能开关
     enable_related_questions: bool = field(default=True)
-    enable_history: bool = field(default=True)
+    enable_history: bool = field(default=False)
 
     # API Keys 和 Endpoints
     api_keys: Dict[str, str] = field(default_factory=dict)
@@ -80,7 +80,7 @@ class Config:
 
         # 功能开关
         config.enable_related_questions = os.getenv("RELATED_QUESTIONS", "true").lower() == "true"
-        config.enable_history = os.getenv("ENABLE_HISTORY", "true").lower() == "true"
+        config.enable_history = os.getenv("ENABLE_HISTORY", "false").lower() == "true"
 
         # API Keys
         config.api_keys = {

@@ -29,14 +29,15 @@
 
 ## Install Dependencies
 
-```shell
+```zsh
 pip install -r requirements.txt
 ```
 
 
 ## Run
 
-```shell
+```zsh
+export ZHIPUAI_API_KEY=your_api_key
 python search.py
 ```
 Now your search application is running at: http://0.0.0.0:8081

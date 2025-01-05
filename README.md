@@ -30,14 +30,15 @@
 
 ## 安装依赖
 
-```shell
+```zsh
 pip install -r requirements.txt
 ```
 
 
 ## 运行
 
-```shell
+```zsh
+export ZHIPUAI_API_KEY=your_api_key
 python search.py
 ```
 好了，现在你的搜索应用正在运行：http://0.0.0.0:8081
@@ -47,7 +48,7 @@ python search.py
 
 ### rebuild前端web
 使用npm构建前端（需要nodejs 18以上版本）
-```shell
+```zsh
 cd web && npm install && npm run build
 ```
 输出：项目根目录产出`ui`文件夹，包含前端静态文件。
